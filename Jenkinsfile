@@ -40,7 +40,11 @@ pipeline {
             }
         }
         stage('deploy') {
-            steps {}
+            steps {
+                script {
+                    echo "deploying the docker image..."
+                }
+            }
         }
         stage('commit version update') {
             steps {
