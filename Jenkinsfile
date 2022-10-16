@@ -40,6 +40,7 @@ pipeline {
             }
         }
         stage('deploy') {
+            steps {}
         }
         stage('commit version update') {
             steps {
