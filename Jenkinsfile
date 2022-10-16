@@ -42,7 +42,7 @@ pipeline {
         stage('deploy') {
             steps {
                 script {
-                    echo "deploying the docker image..."
+                    echo "deploying the docker image...test"
                 }
             }
         }
