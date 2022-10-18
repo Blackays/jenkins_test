@@ -65,7 +65,7 @@ pipeline {
                     echo "deploying the docker image to Droplet..."
                     echo "${DROPLET_PUBLIC_IP}"
 
-                    def shellCmd = "bash ./server-cmds.sh ${IMAGE_NAME}"
+                    def shellCmd = "bash /home/user/server-cmds.sh ${IMAGE_NAME}"
                     def droplet = "root@${DROPLET_PUBLIC_IP}"
 
                     sshagent(['droplet-server-key']) {
