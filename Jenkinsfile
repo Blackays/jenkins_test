@@ -32,9 +32,27 @@ pipeline {
                 script {
                     echo "building the docker image..."
                     withCredentials([usernamePassword(credentialsId: 'dockerhub', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
-                        sh "docker build -t blackays/java-maven:${IMAGE_NAME} ."
+                        sh "docker build -t blackays/${IMAGE_NAME} ."
                         sh "echo $PASS | docker login -u $USER --password-stdin"
-                        sh "docker push blackays/java-maven:${IMAGE_NAME}"
+                        sh "docker push blackays/${IMAGE_NAME}"
+                    }
+                }
+            }
+        }
+        stage('provision server') {
+            environment {
+                DIGITALOCEAN_ACCESS_TOKEN = credentials('DIGITALOCEAN_ACCESS_TOKEN')
+                TF_VAR_env_prefix = 'test'
+            }
+            steps {
+                script {
+                    dir('terraform') {
+                        sh "terraform init"
+                        sh "terraform apply --auto-approve"
+                        DROPLET_PUBLIC_IP= sh (
+                            script: "terraform output droplet_ipv4"
+                            returnStdout: true
+                            ).trim()
                     }
                 }
             }
@@ -42,10 +60,24 @@ pipeline {
         stage('deploy') {
             steps {
                 script {
-                    echo "deploying the docker image...test11"
+                    echo "waiting for droplet to initialize"
+                    sleep(time: 150,unit: "SECONDS")
+
+                    echo "deploying the docker image to Droplet..."
+                    echo "${DROPLET_PUBLIC_IP}"
+
+                    def shellCmd = "bash ./server-cmds.sh ${IMAGE_NAME}"
+                    def droplet = "root@${DROPLET_PUBLIC_IP}"
+
+                    sshagent(['droplet-server-key']) {
+                        sh "scp -o StrictHostKeyChecking=no server-cmds.sh ${droplet}:/home/user"
+                        sh "scp -o StrictHostKeyChecking=no docker-compose.yaml ${droplet}:/home/user"
+                        sh "ssh -o StrictHostKeyChecking=no ${droplet} ${shellCmd}"
+
+                    }
                 }
             }
-        }
+        } 
         stage('commit version update') {
             steps {
                 script {
