@@ -73,7 +73,7 @@ pipeline {
                         sh "ls /"
                         sh "pwd"
                         sh "ls /home/"
-                        sh "mkdir /home/user"
+                        sh "sudo mkdir /home/user"
                         //sh "ls /home/user/"
                         //sh "touch /home/user/lol.txt"
 
