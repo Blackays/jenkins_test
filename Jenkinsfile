@@ -50,7 +50,7 @@ pipeline {
                         sh "terraform init"
                         sh "terraform apply --auto-approve"
                         DROPLET_PUBLIC_IP= sh (
-                            script: "terraform output droplet_ipv4"
+                            script: "terraform output droplet_ipv4",
                             returnStdout: true
                             ).trim()
                     }
