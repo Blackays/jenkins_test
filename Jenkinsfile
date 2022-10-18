@@ -15,7 +15,7 @@ pipeline {
                         versions:commit'
                     def matcher = readFile('pom.xml') =~ '<version>(.+)</version>'
                     def version = matcher[0][1]
-                    env.IMAGE_NAME = "java-maven:$version-$BUILD_NUMBER"
+                    env.IMAGE_NAME = "blackays/java-maven:$version-$BUILD_NUMBER"
                 }
             }
         }
@@ -32,9 +32,9 @@ pipeline {
                 script {
                     echo "building the docker image..."
                     withCredentials([usernamePassword(credentialsId: 'dockerhub', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
-                        sh "docker build -t blackays/${IMAGE_NAME} ."
+                        sh "docker build -t ${IMAGE_NAME} ."
                         sh "echo $PASS | docker login -u $USER --password-stdin"
-                        sh "docker push blackays/${IMAGE_NAME}"
+                        sh "docker push ${IMAGE_NAME}"
                     }
                 }
             }
