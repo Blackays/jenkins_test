@@ -73,7 +73,7 @@ pipeline {
                         sh "ls /"
                         sh "pwd"
                         sh "ls /home/"
-                        sh "ls /home/user/"
+                        //sh "ls /home/user/"
                         //sh "touch /home/user/lol.txt"
 
                         sh "scp -o StrictHostKeyChecking=no server-cmds.sh ${droplet}:/home/user"
