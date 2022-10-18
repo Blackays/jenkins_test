@@ -60,7 +60,7 @@ pipeline {
             steps {
                 script {
                     echo "waiting for droplet to initialize"
-                    //sleep(time: 90,unit: "SECONDS")
+                    sleep(time: 90,unit: "SECONDS")
 
                     echo "deploying the docker image to Droplet..."
                     echo "${DROPLET_PUBLIC_IP}"
