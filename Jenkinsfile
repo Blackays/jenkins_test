@@ -76,8 +76,8 @@ pipeline {
                         //sh "ls /home/user/"
                         //sh "touch /home/user/lol.txt"
 
-                        sh "scp -o StrictHostKeyChecking=no server-cmds.sh ${droplet}:/home/user/"
-                        sh "scp -o StrictHostKeyChecking=no docker-compose.yaml ${droplet}:/home/user/"
+                        sh "scp -o StrictHostKeyChecking=no server-cmds.sh ${droplet}:/home/user/server-cmds.sh"
+                        sh "scp -o StrictHostKeyChecking=no docker-compose.yaml ${droplet}:/home/user/docker-compose.yaml"
                         sh "ssh -o StrictHostKeyChecking=no ${droplet} ${shellCmd}"
                     }
                 }
