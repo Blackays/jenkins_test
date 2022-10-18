@@ -78,10 +78,9 @@ pipeline {
 
                         sh "scp -o StrictHostKeyChecking=no server-cmds.sh ${droplet}:/home/user/server-cmds.sh"
                         sh "scp -o StrictHostKeyChecking=no docker-compose.yaml ${droplet}:/home/user/docker-compose.yaml"
-                        withCredentials([usernamePassword(credentialsId: 'dockerhub', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
-                            sh "echo $PASS | docker login -u $USER --password-stdin"
-                            sh "ssh -o StrictHostKeyChecking=no ${droplet} ${shellCmd}"
-                        }
+                         withCredentials([usernamePassword(credentialsId: 'dockerhub', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
+                        sh "ssh -o StrictHostKeyChecking=no ${droplet} ${shellCmd} $PASS $USER"
+                    }
                     }
                 }
             }
